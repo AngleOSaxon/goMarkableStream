@@ -52,11 +52,20 @@ function copyCanvasContent() {
 		resizableContext.drawImage(fixedCanvas, 0, 0, fixedCanvas.width, fixedCanvas.height, destX, destY, destWidth, destHeight);
 
 		resizableContext.restore(); // Restore the state
+
+		// horrible hack because I can't be bothered to figure out how to work with the rotation
+		// Uses the post-rotation image data and flips horizontally
+		// Can be done in a single operation with the rotation, but I haven't spent the time to figure out how
+		resizableContext.scale(-1, 1);
+		resizableContext.drawImage(resizableCanvas, -resizableCanvas.width, 0, resizableCanvas.width, resizableCanvas.height);
+
 		resizeCanvas();
 		return;
 
 	}
-	resizableContext.drawImage(fixedCanvas, 0, 0, resizableCanvas.width, resizableCanvas.height);
+	// Flip image vertically and draw
+	resizableContext.scale(1, -1);
+	resizableContext.drawImage(fixedCanvas, 0, -resizableCanvas.height, resizableCanvas.width, resizableCanvas.height);
 	// Draw the image from the first canvas onto the second canvas
 }
 
